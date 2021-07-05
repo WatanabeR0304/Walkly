@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 
 class MyApplication: Application() {
+
     companion object {
         @SuppressLint("StaticFieldLeak")
         private lateinit var mContext: Context
@@ -16,6 +17,6 @@ class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        mContext = this
+        mContext = this;
     }
 }
