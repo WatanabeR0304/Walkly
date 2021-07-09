@@ -37,8 +37,11 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
         sensor = systemService!!.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         //センサにイベントリスナを登録
-        systemService?.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        var ret: Boolean = false;
+        ret = systemService!!.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
+        var a: Int;
+        a = 0       //ブレークポイントを張るためのダミー
     }
 
     public fun resetStepCount() {
@@ -63,10 +66,13 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
         val values:  FloatArray? = event?.values
         val timestamp: Long     = event?.timestamp ?: 0
 
+        /*
         AlertDialog.Builder(mContext)
             .setTitle("歩数")
             .setMessage("歩数に来たよ！")
             .show()
+
+         */
 
         if ((sensor != null) && (values != null)) {
             if (sensor.type == Sensor.TYPE_STEP_COUNTER) {
