@@ -1,7 +1,6 @@
 
 package com.example.walkly
 
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.walkly.application.MapApplicationService
@@ -15,8 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
+class MapsActivity : AppCompatActivity() {
 
     private val mapApplication: MapApplicationService = MapApplicationService(this)
     private val mapCallback: MapCallback = MapCallback(mapApplication)
@@ -41,10 +39,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         button.setOnClickListener {
             mapApplication.handleActivityButton()
         }
-
-
-    }
-    override fun onMapReady(googleMap: GoogleMap) {
 
     }
 }

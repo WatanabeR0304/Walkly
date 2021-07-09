@@ -17,6 +17,7 @@ class HTTPRequest {
      * @param listener 成功時の処理
      * @param errorListener 失敗時の処理
      */
+
     fun getRequest(
         url: String,
         listener: Response.Listener<String>,
