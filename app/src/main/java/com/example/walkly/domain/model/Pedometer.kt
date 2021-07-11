@@ -24,6 +24,11 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
     private var mAccumTimeSec: Long = 0        //計測している累計秒数
     private var mPrevTime: Long = 0        //前回のタイムスタンプ[秒](0の場合初回)
 
+    //カロリー計算用
+    private var mMomentum:Double = 3.0     //運動強度[METS] 3は一般的な散歩での値
+    private var mWeight:Double   = 65.0    //体重[kg]
+    private var mCalorie:Double  = 0.0     //歩いて消費したカロリー[kcal]
+
     init {
 
         AlertDialog.Builder(mContext)
@@ -55,6 +60,11 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
     public fun getSteps(): Long {
         //累計歩数を返します
         return mAccumStepCount
+    }
+
+    public fun getCalorie():Double {
+        //消費カロリーを返します
+        return mCalorie
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -90,9 +100,26 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
                         //HW累計歩数と時刻の差分を計測している累計歩数と時間に加算
                         mAccumStepCount += hwstep - mPrevStep
                         mPrevStep = hwstep
-                        mAccumTimeSec += time - mPrevTime
+
+                        //加算する差分時間を計算
+                        var addSec = time - mPrevTime
+
+                        //60秒以上差がある場合は、休憩していたと
+                        //みなして、時間は加算しません
+                        if( addSec >= 60 ) {
+                            addSec = 0
+                        }
+
+                        mAccumTimeSec += addSec
                         mPrevTime = time
 
+                        //ここまでの運動時間から消費カロリーを計算
+                        //※計算式は下記のサイトを参考にしました
+                        //https://news.mynavi.jp/article/nadeshiko-48/
+                        //
+                        // 消費カロリー[kcal] = 3[メッツ] × 体重[kg] × 運動時間[時] × 1.05
+                        //
+                        mCalorie = mMomentum * mWeight * (mAccumTimeSec.toDouble() / 3600.0) * 1.05
 
 
                         //確認のための表示
