@@ -1,9 +1,9 @@
-package com.example.walkly.domain.model.mymap
+package com.example.walkly.domain.model
 
 import android.graphics.Color
 import com.android.volley.Response
+import com.example.walkly.BuildConfig
 import com.example.walkly.R
-import com.example.walkly.domain.model.MyApplication
 import com.example.walkly.lib.HTTPRequest
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -11,7 +11,13 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import org.json.JSONObject
 
-class Route(private val mMap: GoogleMap) {
+/**
+ * 現在地からチェックポイントまでの経路を引く
+ */
+class Directions(private val mMap: GoogleMap) {
+    companion object {
+        const val DEBUG_MODE = true // TODO: 本番時には消す
+    }
 
     /**
      * 経路を引く
@@ -22,10 +28,9 @@ class Route(private val mMap: GoogleMap) {
      */
     fun drawRoute(origin: LatLng, place: MutableList<LatLng>) {
 
-        // TODO: 正式リリース時に消す
-        // TODO: debug push用
-        if (false) {
-
+        // TODO: リファクタリング
+        // TODO: 正式リリース時に消す & リリースビルド時にtrueになることを確認する
+        if (!BuildConfig.DEBUG || DEBUG_MODE) {
             val path: MutableList<List<LatLng>> = ArrayList()
             val urlDirections = createURLDirections(origin, place)
 
@@ -46,7 +51,7 @@ class Route(private val mMap: GoogleMap) {
                         }
                         for (i in 0 until path.size) {
                             mMap.addPolyline(
-                                PolylineOptions().addAll(path[i]).color(Color.BLUE)
+                                PolylineOptions().addAll(path[i]).color(Color.argb(100, 0, 0, 255))
                             )
                         }
 
@@ -57,10 +62,9 @@ class Route(private val mMap: GoogleMap) {
                 }
             }
 
-            val errorListener = Response.ErrorListener {  }
+            val errorListener = Response.ErrorListener {}
             HTTPRequest().getRequest(urlDirections, listener, errorListener)
         }
-
     }
 
     /**
@@ -86,7 +90,7 @@ class Route(private val mMap: GoogleMap) {
             for (i in 1 until size - 1) {
                 waypointsParam += "|${points[i].latitude},${points[i].longitude}"
             }
-             pointsParam += "${points[size - 1].latitude},${points[size - 1].longitude}${waypointsParam}"
+            pointsParam += "${points[size - 1].latitude},${points[size - 1].longitude}${waypointsParam}"
         }
 
         return "https://maps.googleapis.com/maps/api/directions/json?mode=walking&${originParam}${pointsParam}&key=${apiKey}"

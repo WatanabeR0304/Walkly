@@ -1,6 +1,7 @@
 package com.example.walkly.domain.model.mymap
 
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PointOfInterest
 
@@ -28,5 +29,9 @@ class MyMap(private val mMap: GoogleMap) {
 
             markerList.add(marker)
         }
+    }
+
+    fun deleteMarker(marker: Marker) {
+        markerList.delete(marker)
     }
 }

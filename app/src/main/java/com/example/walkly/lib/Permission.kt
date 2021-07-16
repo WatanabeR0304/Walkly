@@ -3,6 +3,7 @@ package com.example.walkly.lib
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.walkly.domain.model.MyApplication
 
 /**
  * パーミッションに関する機能をまとめるクラス
@@ -19,7 +20,7 @@ class Permission(private val activity: AppCompatActivity) {
      */
     fun checkPermission(permission: String): Boolean {
         return ActivityCompat.checkSelfPermission(
-            activity,
+            MyApplication.getContext(),
             permission
         ) == PackageManager.PERMISSION_GRANTED
     }

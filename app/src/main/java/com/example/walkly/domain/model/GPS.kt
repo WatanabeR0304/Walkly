@@ -1,16 +1,20 @@
 package com.example.walkly.domain.model
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.example.walkly.lib.Permission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.OnSuccessListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.tasks.await
 
 /**
  * GPS利用の許可を求めたり、現在地レイヤーを表示したりする
@@ -41,8 +45,9 @@ class GPS(appActivity: AppCompatActivity) {
     /**
      * 現在地を取得する
      */
-    fun getCurrentLocation() {
-
+    @SuppressLint("MissingPermission")
+    suspend fun getCurrentLocation(): Location {
+            return fusedLocationClient.lastLocation.await()
     }
 
 }
