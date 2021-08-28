@@ -47,6 +47,7 @@ class Pedometer ( var mContext: Context ): SensorEventListener {
 
         var a: Int;
         a = 0       //ブレークポイントを張るためのダミー
+
     }
 
     public fun resetStepCount() {
